@@ -1,0 +1,29 @@
+= Summary =
+
+iperf3 is a tool for measuring achievable bandwidth on IP networks.
+
+iperf3 is NOT backwards compatible with the original iperf.
+
+Supported platforms:
+  * Linux
+  * FreeBSD 
+  * Mac OSX
+
+= Building iperf3 =
+
+== Prerequisites: ==
+  * libuuid: this is not installed by default for Debian/Ubuntu Systems
+             to install: apt-get install uuid-dev
+
+== Building ==
+
+Run:
+
+./configure
+
+and 
+
+make
+
+
+For more information see: http://code.google.com/p/iperf/

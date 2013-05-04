@@ -1,0 +1,132 @@
+                           PCAUSA Test TCP (PCATTCP)
+                                 Release Notes
+
+                    Printing Communications Associates, Inc.
+                            4201 Brunswick Court
+                            Smyrna, GA 30080 USA
+
+                            TEL: (770) 432-4580
+                            FAX: (770) 436-7246
+                        E-Mail: tdivine@pcausa.com
+
+======================================================================
+Component Part No.: N/A
+Component Name    : PCAUSA Test TCP (PCATTCP)
+======================================================================
+Component Version : 2.01.01.14
+Release Date      : August 25, 2010
+
+1.) Removed code that raised thread priority to THREAD_PRIORITY_ABOVE_NORMAL.
+This may introduce unexplained behavior with testing.
+
+Messing with priority isn't a good idea...
+
+======================================================================
+Component Version : 2.01.01.13
+Release Date      : August 24, 2010
+
+1.) Adapted the tool to support IPv6.
+
+2.) Fixed bug in multi-port -p option. This option created one too
+few port instances.
+
+3.) Revised output to include more IP version, address and port
+information.
+
+======================================================================
+Component Version : 2.01.01.12
+Release Date      : April 29, 2010
+
+1.) Now set periodic timer resolution using timeBeginPeriod and
+timeEndPeriod.
+
+2.) Timestamp fetched using GetSystemTimeAsFiletime, which possibly
+improves resolution.
+
+3.) Small change in sending UDP guard messages with goal of improving
+elapsed time measurement.
+
+4.) Now raise thread priority to THREAD_PRIORITY_ABOVE_NORMAL.
+
+======================================================================
+Component Version : 2.01.01.11
+Release Date      : February 4, 2010
+
+1.) Now flush stderr/stdout for all exit paths.
+
+======================================================================
+Component Version : 2.01.01.10
+Release Date      : November 3, 2009
+
+1.) Added new -a option to specifiy local host IP address.
+2.) Now built using Visual Studio 2008 (for better or worse...).
+
+======================================================================
+Component Version : 2.01.01.07
+Release Date      : November 23, 2003
+
+1.) Incorporated fix identified by Clarkson University that reduces
+hangs when ending the UDP transmitter test. See additional comments
+in TTCP_TransmitUDP module.
+
+
+======================================================================
+Component Version : 2.01.01.06
+Release Date      : April 5, 2003
+
+1.) Fixed minor bug in TTCP transmitter. PCAUSA PCATTCP preamble was
+not inserted correctly when building transmit buffer.
+
+
+======================================================================
+Component Version : 2.01.01.05
+Release Date      : May 31, 2002
+
+1.) Modification to allow SO_RVCBUF and SO_SNDBUF values of zero(0)
+to be handled. Original implementation did not set these options if
+their value was zero.
+
+2.) Added -w write delay option.
+
+======================================================================
+Component Version : 2.01.01.04
+Release Date      : May 30, 2002
+
+1.) Minor fix to test exit routines.
+
+======================================================================
+Component Version : 2.01.01.03
+Release Date      : May 29, 2002
+
+Externally Visible Differences
+------------------------------
+1.) Added -c "continuous" option:
+   -c       -t: send continuously
+            -r: accept multiple connections sequentially
+
+1.) Added -R multi-threaded concurrent TCP/UDP receiver option.
+
+2.) Fixed error codes. Now fetch using WSAGetLastError instead of perror.
+The latter did not handle socket errors.
+
+3.) Revised test output messages.
+
+4.) New PCATTCP.chm HtmlHelp documentation.
+
+
+Implementation Differences
+--------------------------
+Extensive rework to suit author's style.
+
+
+======================================================================
+Component Version : 1.00.00.02
+Release Date      : January, 2000
+
+Fix setting of setsockopt call for TCP_NODELAY.
+
+======================================================================
+Component Version : 1.00.00.01
+Release Date      : April, 1999
+
+Initial release of PCAUSA's port of TTCP to Windows.

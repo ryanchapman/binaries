@@ -1,0 +1,62 @@
+
+LSI Logic MPT Configuration Utility, Version 1.63, June 4, 2009
+
+Help Usage
+Invoking lsiutil with no arguments will start an interactive session.
+
+      -e                Turn on Expert Mode (more menu options).
+      -w, -ww, -www     Log internal operations to lsiutil.log, for debug.
+      -y                Answer yes to yes/no questions whose default is yes.
+      -n                Answer no to yes/no questions whose default is no.
+      -j type[,type]    Include just ports of type 'type' (FC, SCSI, SAS).
+      -x                Concatenate SAS firmware and NVDATA files.
+
+Display Options
+usage:  lsiutil [ -p portNumber ] [ -u ][ -s ] [ -d ] [ -i ] [ -b ]
+      -p portNumber     Specify the port number to operate on.
+                        If not specified, all ports are used.
+      -u                Use untagged, rather than tagged, SCSI commands.
+      -s                Scan for and display all targets.
+      -d                Dump all config pages.
+      -i                Display port settings.
+      -b                Show board manufacturing information.
+      -m freq[,time]    Monitor port performance, updating the display
+                        every 'freq' seconds, for 'time' seconds.
+
+Examples:
+1. to display the port settings and targets for port 1:
+       lsiutil -p 1 -i -s
+2. to display the targets found on all known ports:
+       lsiutil -s
+
+Operational Options
+usage:  lsiutil -p portNumber [ -l linkSpeed ] [ -t topology ]
+                              [ -c timeout,depth ] [ -r ]
+      -p portNumber     Specify the port number to operate on.
+                        Required parameter for operational options.
+      -l linkSpeed      Set link speed.  Valid options for linkSpeed are:
+                            'a'     Auto link speed negotiation
+                            '1'     Force 1Gb link speed
+                            '2'     Force 2Gb link speed
+                            '4'     Force 4Gb link speed
+      -t topology       Set topology.  Valid options for topology are:
+                            'a'     Auto topology negotiation
+                            '1'     Force NL_Port topology
+                            '2'     Force N_Port topology
+      -c timeout,depth  Set interrupt coalescing values.
+                        Timeout is a value in microseconds between
+                        1 and 1000.  Depth is a value between 1 and 128.
+                        Setting either or both values to zero will
+                        disable interrupt coalescing for that port.
+      -r                Perform a chip reset on the given port.
+      -z                Perform an FC link reset on the given port.
+NOTE:  In order for linkSpeed, topology, or interrupt coalescing
+       settings to take effect, a chip reset is necessary.
+
+Examples:
+1. to force linkspeed to 1Gb on port 2:
+       lsiutil -p 2 -l 1
+2. to set interrupt coalescing to a timeout of 200ms with
+   a depth of 9 and to force N_Port topology on port 1:
+       lsiutil -p 1 -c 200,9 -t 2
+

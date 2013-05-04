@@ -1,0 +1,344 @@
+fio
+---
+
+fio is a tool that will spawn a number of threads or processes doing a
+particular type of io action as specified by the user. fio takes a
+number of global parameters, each inherited by the thread unless
+otherwise parameters given to them overriding that setting is given.
+The typical use of fio is to write a job file matching the io load
+one wants to simulate.
+
+
+Source
+------
+
+fio resides in a git repo, the canonical place is:
+
+git://git.kernel.dk/fio.git
+
+If you are inside a corporate firewall, git:// may not always work for
+you. In that case you can use the http protocol, path is the same:
+
+http://git.kernel.dk/fio.git
+
+Snapshots are frequently generated and they include the git meta data as
+well. You can download them here:
+
+http://brick.kernel.dk/snaps/
+
+
+Binary packages
+---------------
+
+Debian:
+Starting with Debian "Squeeze", fio packages are part of the official
+Debian repository. http://packages.debian.org/search?keywords=fio
+
+Ubuntu:
+Starting with Ubuntu 10.04 LTS (aka "Lucid Lynx"), fio packages are part
+of the Ubuntu "universe" repository.
+http://packages.ubuntu.com/search?keywords=fio
+
+Red Hat, CentOS & Co:
+Dag Wieërs has RPMs for Red Hat related distros, find them here:
+http://dag.wieers.com/rpm/packages/fio/
+
+Mandriva:
+Mandriva has integrated fio into their package repository, so installing
+on that distro should be as easy as typing 'urpmi fio'.
+
+Solaris:
+Packages for Solaris are available from OpenCSW. Install their pkgutil
+tool (http://www.opencsw.org/get-it/pkgutil/) and then install fio via
+'pkgutil -i fio'.
+
+Windows:
+Bruce Cran <bruce@cran.org.uk> has fio packages for Windows at
+http://www.bluestop.org/fio/ .
+
+
+Mailing list
+------------
+
+There's a mailing list associated with fio. It's meant for general
+discussion, bug reporting, questions, and development - basically anything
+that has to do with fio. An automated mail detailing recent commits is
+automatically sent to the list at most daily. The list address is
+fio@vger.kernel.org, subscribe by sending an email to
+majordomo@vger.kernel.org with
+
+subscribe fio
+
+in the body of the email. Archives can be found here:
+
+http://www.spinics.net/lists/fio/
+
+and archives for the old list can be found here:
+
+http://maillist.kernel.dk/fio-devel/
+
+
+Building
+--------
+
+Just type 'configure', 'make' and 'make install'.
+
+Note that GNU make is required. On BSD it's available from devel/gmake;
+on Solaris it's in the SUNWgmake package. On platforms where GNU make
+isn't the default, type 'gmake' instead of 'make'.
+
+Configure will print the enabled options. Note that on Linux based
+platforms, you'll need to have the libaio development packages
+installed to use the libaio engine. Depending on distro, it is
+usually called libaio-devel or libaio-dev.
+
+For gfio, you need gtk 2.18 or newer and associated glib threads
+and cairo. gfio isn't built automatically, it needs to be enabled
+with a --enable-gfio option to configure.
+
+To build FIO with a cross-compiler:
+ $ make clean
+ $ make CROSS_COMPILE=/path/to/toolchain/prefix
+Configure will attempt to determine the target platform automatically.
+
+
+Windows
+-------
+
+On Windows Cygwin (http://www.cygwin.com/) is required in order to
+build fio. To create an MSI installer package install WiX 3.7 from
+http://wixtoolset.org and run dobuild.cmd from the
+os/windows directory.
+
+How to compile FIO on 64-bit Windows:
+
+ 1. Install Cygwin (http://www.cygwin.com/setup.exe). Install 'make' and all
+    packages starting with 'mingw64-i686' and 'mingw64-x86_64'.
+ 2. Download ftp://sourceware.org/pub/pthreads-win32/prebuilt-dll-2-9-1-release/dll/x64/pthreadGC2.dll
+    and copy to the fio source directory.
+ 3. Open the Cygwin Terminal.
+ 4. Go to the fio directory (source files).
+ 5. Run 'make clean'.
+ 6. Run 'make'.
+
+To build fio on 32-bit Windows, download x86/pthreadGC2.dll instead and do
+'./configure --build-32bit-win=yes' before 'make'.
+
+It's recommended that once built or installed, fio be run in a Command Prompt
+or other 'native' console such as console2, since there are known to be display
+and signal issues when running it under a Cygwin shell
+(see http://code.google.com/p/mintty/issues/detail?id=56 for details).
+
+
+Command line
+------------
+
+$ fio
+	--debug			Enable some debugging options (see below)
+	--parse-only		Parse options only, don't start any IO
+	--output		Write output to file
+	--runtime		Runtime in seconds
+	--latency-log		Generate per-job latency logs
+	--bandwidth-log		Generate per-job bandwidth logs
+	--minimal		Minimal (terse) output
+	--output-format=type	Output format (terse,json,normal)
+	--terse-version=type	Terse version output format (default 3, or 2 or 4).
+	--version		Print version info and exit
+	--help			Print this page
+	--cpuclock-test		Perform test/validation of CPU clock
+	--cmdhelp=cmd		Print command help, "all" for all of them
+	--enghelp=engine	Print ioengine help, or list available ioengines
+	--enghelp=engine,cmd	Print help for an ioengine cmd
+	--showcmd		Turn a job file into command line options
+	--readonly		Turn on safety read-only checks, preventing
+				writes
+	--eta=when		When ETA estimate should be printed
+				May be "always", "never" or "auto"
+	--eta-newline=time	Force a new line for every 'time' period passed
+	--status-interval=t	Force full status dump every 't' period passed
+	--section=name		Only run specified section in job file.
+				Multiple sections can be specified.
+	--alloc-size=kb		Set smalloc pool to this size in kb (def 1024)
+	--warnings-fatal	Fio parser warnings are fatal
+	--max-jobs		Maximum number of threads/processes to support
+	--server=args		Start backend server. See Client/Server section.
+	--client=host		Connect to specified backend.
+	--idle-prof=option	Report cpu idleness on a system or percpu basis
+				(option=system,percpu) or run unit work
+				calibration only (option=calibrate).
+
+
+Any parameters following the options will be assumed to be job files,
+unless they match a job file parameter. You can add as many as you want,
+each job file will be regarded as a separate group and fio will stonewall
+its execution.
+
+The --readonly switch is an extra safety guard to prevent accidentally
+turning on a write setting when that is not desired. Fio will only write
+if rw=write/randwrite/rw/randrw is given, but this extra safety net can
+be used as an extra precaution. It will also enable a write check in the
+io engine core to prevent an accidental write due to a fio bug.
+
+The debug switch allows adding options that trigger certain logging
+options in fio. Currently the options are:
+
+	process		Dump info related to processes
+	file		Dump info related to file actions
+	io		Dump info related to IO queuing
+	mem		Dump info related to memory allocations
+	blktrace	Dump info related to blktrace setup
+	verify		Dump info related to IO verification
+	all		Enable all debug options
+	random		Dump info related to random offset generation
+	parse		Dump info related to option matching and parsing
+	diskutil	Dump info related to disk utilization updates
+	job:x		Dump info only related to job number x
+	mutex		Dump info only related to mutex up/down ops
+	profile		Dump info related to profile extensions
+	time		Dump info related to internal time keeping
+	? or help	Show available debug options.
+
+You can specify as many as you want, eg --debug=file,mem will enable
+file and memory debugging.
+
+The section switch is meant to make it easier to ship a bigger job file
+instead of several smaller ones. Say you define a job file with light,
+moderate, and heavy parts. Then you can ask fio to run the given part
+only by giving it a --section=heavy command line option. The section
+option only applies to job sections, the reserved 'global' section is
+always parsed and taken into account.
+
+Fio has an internal allocator for shared memory called smalloc. It
+allocates shared structures from this pool. The pool defaults to 1024k
+in size, and can grow to 128 pools. If running large jobs with randommap
+enabled it can run out of memory, in which case the --alloc-size switch
+is handy for starting with a larger pool size. The backing store is
+files in /tmp. Fio cleans up after itself, while it is running you
+may see .fio_smalloc.* files in /tmp.
+
+
+Job file
+--------
+
+See the HOWTO file for a more detailed description of parameters and what
+they mean. This file contains the terse version. You can describe big and
+complex setups with the command line, but generally it's a lot easier to
+just write a simple job file to describe the workload. The job file format
+is in the ini style format, as that is easy to read and write for the user.
+
+The HOWTO or man page has a full list of all options, along with
+descriptions, etc. The --cmdhelp option also lists all options. If
+used with an option argument, it will detail that particular option.
+
+
+Client/server
+------------
+
+Normally you would run fio as a stand-alone application on the machine
+where the IO workload should be generated. However, it is also possible to
+run the frontend and backend of fio separately. This makes it possible to
+have a fio server running on the machine(s) where the IO workload should
+be running, while controlling it from another machine.
+
+To start the server, you would do:
+
+fio --server=args
+
+on that machine, where args defines what fio listens to. The arguments
+are of the form 'type,hostname or IP,port'. 'type' is either 'ip' (or ip4)
+for TCP/IP v4, 'ip6' for TCP/IP v6, or 'sock' for a local unix domain socket.
+'hostname' is either a hostname or IP address, and 'port' is the port to
+listen to (only valid for TCP/IP, not a local socket). Some examples:
+
+1) fio --server
+
+   Start a fio server, listening on all interfaces on the default port (8765).
+
+2) fio --server=ip:hostname,4444
+
+   Start a fio server, listening on IP belonging to hostname and on port 4444.
+
+3) fio --server=ip6:::1,4444
+
+   Start a fio server, listening on IPv6 localhost ::1 and on port 4444.
+
+4) fio --server=,4444
+
+   Start a fio server, listening on all interfaces on port 4444.
+
+5) fio --server=1.2.3.4
+
+   Start a fio server, listening on IP 1.2.3.4 on the default port.
+
+6) fio --server=sock:/tmp/fio.sock
+
+   Start a fio server, listening on the local socket /tmp/fio.sock.
+
+When a server is running, you can connect to it from a client. The client
+is run with:
+
+fio --local-args --client=server --remote-args <job file(s)>
+
+where --local-args are arguments that are local to the client where it is
+running, 'server' is the connect string, and --remote-args and <job file(s)>
+are sent to the server. The 'server' string follows the same format as it
+does on the server side, to allow IP/hostname/socket and port strings.
+You can connect to multiple clients as well, to do that you could run:
+
+fio --client=server2 <job file(s)> --client=server2 <job file(s)>
+
+
+Platforms
+---------
+
+Fio works on (at least) Linux, Solaris, AIX, HP-UX, OSX, NetBSD, Windows
+and FreeBSD.  Some features and/or options may only be available on some of
+the platforms, typically because those features only apply to that platform
+(like the solarisaio engine, or the splice engine on Linux).
+
+Some features are not available on FreeBSD/Solaris even if they could be
+implemented, I'd be happy to take patches for that. An example of that is
+disk utility statistics and (I think) huge page support, support for that
+does exist in FreeBSD/Solaris.
+
+Fio uses pthread mutexes for signalling and locking and FreeBSD does not
+support process shared pthread mutexes. As a result, only threads are
+supported on FreeBSD. This could be fixed with sysv ipc locking or
+other locking alternatives.
+
+Other *BSD platforms are untested, but fio should work there almost out
+of the box. Since I don't do test runs or even compiles on those platforms,
+your mileage may vary. Sending me patches for other platforms is greatly
+appreciated. There's a lot of value in having the same test/benchmark tool
+available on all platforms.
+
+Note that POSIX aio is not enabled by default on AIX. If you get messages like:
+
+    Symbol resolution failed for /usr/lib/libc.a(posix_aio.o) because:
+        Symbol _posix_kaio_rdwr (number 2) is not exported from dependent module /unix.
+
+you need to enable POSIX aio. Run the following commands as root:
+
+    # lsdev -C -l posix_aio0
+        posix_aio0 Defined  Posix Asynchronous I/O
+    # cfgmgr -l posix_aio0
+    # lsdev -C -l posix_aio0
+        posix_aio0 Available  Posix Asynchronous I/O
+
+POSIX aio should work now. To make the change permanent:
+
+    # chdev -l posix_aio0 -P -a autoconfig='available'
+        posix_aio0 changed
+
+
+Author
+------
+
+Fio was written by Jens Axboe <axboe@kernel.dk> to enable flexible testing
+of the Linux IO subsystem and schedulers. He got tired of writing
+specific test applications to simulate a given workload, and found that
+the existing io benchmark/test tools out there weren't flexible enough
+to do what he wanted.
+
+Jens Axboe <axboe@kernel.dk> 20060905
+

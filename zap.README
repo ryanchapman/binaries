@@ -1,37 +1,26 @@
-Zap measures net performance by sending UDP tests.
-Very good for testing WiFi
+http://code.google.com/p/zapwireless/
 
- You need to start the zapd on the local and remote endpoints
- thon run: 
- 
- zap -sLOCAL_IP -dDEST_IP -Xnum_secs
+Copyright (c) 2004-2009, Ruckus Wireless, Inc.
+All rights reserved.
 
- You cannot use hostnames; only ip addresses
- num_secs is how long you want the test to run for.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Ruckus Wireless nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
 
- Output will spit out onu line per burst, but you only care
- about the last line:
-
- 274: 10.1.0.69->10.1.0.70 1071333=rx   0=dr   0=oo   0=rp  3880=rx in    50.1ms   912.8mbps   916.8 | 944.3 926.3 883.6 871.4 863.1 856.7
-
-274: 274th test
-rx: num of received packets
-dr: num of dropped packets
-oo: num of out of order packets
-rp: num of retried packets
-rx in: num of packets in this batch/sample
-50.1ms: batch sample time
-912.8mbps: throughput
-916.8: cumulative average throughput
-944.3: peak throughput observed
-926.3: median throughput (50%)
-883.6: throughput at 90 percentile, i.e. it was better than this 90% of the time
-871.4: 95 percentile
-863.1: 99 percentile
-856.7: 99.5 percentile
-
-The last number (856.7) is important.  It tells you that 99.5% of the time, you can count on the network to deliver at least this speed
-
-
-
-
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDER OR CONTRIBUTERS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
